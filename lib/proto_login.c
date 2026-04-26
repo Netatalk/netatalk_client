@@ -97,7 +97,7 @@ int afp_changepassword(struct afp_server *server, const char * ua_name,
     }
 
     memcpy(p, userauthinfo, userauthinfo_len);
-    ret = dsi_send(server, (char *) msg, len, DSI_DEFAULT_TIMEOUT,
+    ret = dsi_send(server, (char *) msg, len, server->dsi_default_timeout,
                    afpChangePassword, (void *)rx);
     free(msg);
     return ret;

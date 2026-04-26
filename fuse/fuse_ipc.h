@@ -30,6 +30,7 @@ struct afp_server_mount_request {
     unsigned int map;
     int changeuid;
     char fuse_options[256];
+    int dsi_timeout;
 };
 
 struct afp_server_status_request {

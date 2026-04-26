@@ -41,7 +41,7 @@ int afp_getuserinfo(struct afp_server * server, int thisuser,
     request.userid = htonl(userid);
     request.bitmap = htons(bitmap);
     ret = dsi_send(server, (char *) &request, sizeof(request),
-                   DSI_DEFAULT_TIMEOUT, afpGetUserInfo, (void *) &uidgid);
+                   server->dsi_default_timeout, afpGetUserInfo, (void *) &uidgid);
 
     if (bitmap & kFPGetUserInfo_USER_ID) {
         *newuid = uidgid.uid;
@@ -117,7 +117,7 @@ int afp_mapid(struct afp_server * server, unsigned char subfunction,
     request.subfunction = subfunction;
     request.id = htonl(id);
     ret = dsi_send(server, (char *) &request, sizeof(request),
-                   DSI_DEFAULT_TIMEOUT, afpMapID, (void *) name);
+                   server->dsi_default_timeout, afpMapID, (void *) name);
     return ret;
 }
 
@@ -177,7 +177,7 @@ int afp_mapname(struct afp_server * server, unsigned char subfunction,
     request->command = afpMapName;
     request->subfunction = subfunction;
     ret = dsi_send(server, (char *) request, len,
-                   DSI_DEFAULT_TIMEOUT, afpMapName, (void *) id);
+                   server->dsi_default_timeout, afpMapName, (void *) id);
     free(msg);
     return ret;
 }

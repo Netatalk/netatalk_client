@@ -43,7 +43,7 @@ int afp_sl_exit(void);
 int afp_sl_status(const char * volumename, const char * servername,
                   char *text, unsigned int *remaining);
 int afp_sl_connect(struct afp_url * url, unsigned int uam_mask,
-                   serverid_t *id, char *loginmesg, int *error);
+                   serverid_t *id, char *loginmesg, int *error, int dsi_timeout);
 int afp_sl_disconnect(serverid_t *id);
 int afp_sl_getvolid(struct afp_url * url, volumeid_t *volid);
 int afp_sl_attach(struct afp_url * url, unsigned int volume_options,

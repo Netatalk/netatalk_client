@@ -41,6 +41,7 @@ struct afp_server_connect_request {
     struct afp_server_request_header header;
     struct afp_url url;
     unsigned int uam_mask;
+    int dsi_timeout;
 };
 
 struct afp_server_connect_response {

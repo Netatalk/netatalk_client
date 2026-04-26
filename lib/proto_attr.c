@@ -63,7 +63,8 @@ int afp_listextattr(struct afp_volume * volume,
         request_packet->maxreplysize = htonl(info->maxsize);
         copy_path(server, pathptr, pathname, strlen(pathname));
         unixpath_to_afppath(server, pathptr);
-        ret = dsi_send(server, (char *) request_packet, len, DSI_DEFAULT_TIMEOUT,
+        ret = dsi_send(server, (char *) request_packet, len,
+                       server->dsi_default_timeout,
                        afpListExtAttrs, (void *) info);
         free(msg);
     }
@@ -189,7 +190,8 @@ int afp_getextattr(struct afp_volume * volume, unsigned int dirid,
         /* EA name: length-prefixed (2 bytes length + name) */
         *((uint16_t *)p2) = htons(namelen);
         memcpy(p2 + 2, name, namelen);
-        ret = dsi_send(server, (char *) request_packet, len, DSI_DEFAULT_TIMEOUT,
+        ret = dsi_send(server, (char *) request_packet, len,
+                       server->dsi_default_timeout,
                        afpGetExtAttr, (void *) i);
         free(msg);
     }
@@ -265,7 +267,8 @@ int afp_setextattr(struct afp_volume * volume, unsigned int dirid,
             memcpy(p2, attribdata, attribdatalen);
         }
 
-        ret = dsi_send(server, (char *) request_packet, len, DSI_DEFAULT_TIMEOUT,
+        ret = dsi_send(server, (char *) request_packet, len,
+                       server->dsi_default_timeout,
                        afpSetExtAttr, NULL);
         free(msg);
     }
@@ -324,7 +327,8 @@ int afp_removeextattr(struct afp_volume * volume, unsigned int dirid,
         /* EA name: length-prefixed (2 bytes length + name) */
         *((uint16_t *)p2) = htons(namelen);
         memcpy(p2 + 2, name, namelen);
-        ret = dsi_send(server, (char *) request_packet, len, DSI_DEFAULT_TIMEOUT,
+        ret = dsi_send(server, (char *) request_packet, len,
+                       server->dsi_default_timeout,
                        afpRemoveExtAttr, NULL);
         free(msg);
     }

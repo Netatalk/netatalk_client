@@ -128,7 +128,7 @@ static int afp_setparms_lowlevel(struct afp_volume * volume,
 #endif
     }
 
-    ret = dsi_send(server, (char *) msg, p - msg, DSI_DEFAULT_TIMEOUT,
+    ret = dsi_send(server, (char *) msg, p - msg, server->dsi_default_timeout,
                    command, NULL);
     free(msg);
     return ret;
@@ -194,7 +194,8 @@ int afp_delete(struct afp_volume * volume,
     request_packet->dirid = htonl(dirid);
     copy_path(server, pathptr, pathname, strlen(pathname));
     unixpath_to_afppath(server, pathptr);
-    ret = dsi_send(server, (char *) request_packet, len, DSI_DEFAULT_TIMEOUT,
+    ret = dsi_send(server, (char *) request_packet, len,
+                   server->dsi_default_timeout,
                    afpDelete, NULL);
     free(msg);
     return ret;
@@ -228,7 +229,7 @@ int afp_read(struct afp_volume * volume, unsigned short forkid,
     readext_packet.newlinemask = 0;
     readext_packet.newlinechar = 0;
     rc = dsi_send(volume->server, (char *) &readext_packet,
-                  sizeof(readext_packet), DSI_DEFAULT_TIMEOUT,
+                  sizeof(readext_packet), volume->server->dsi_default_timeout,
                   afpRead, (void *) rx);
     return rc;
 }
@@ -278,7 +279,7 @@ int afp_readext(struct afp_volume * volume, unsigned short forkid,
     readext_packet.offset = hton64(offset);
     readext_packet.reqcount = hton64(count);
     rc = dsi_send(volume->server, (char *) &readext_packet,
-                  sizeof(readext_packet), DSI_DEFAULT_TIMEOUT,
+                  sizeof(readext_packet), volume->server->dsi_default_timeout,
                   afpReadExt, (void *) rx);
     return rc;
 }
@@ -379,7 +380,8 @@ int afp_getfiledirparms(struct afp_volume *volume, unsigned int did,
     getfiledirparms->directory_bitmap = htons(dirbitmap);
     copy_path(server, path, pathname, strlen(pathname));
     unixpath_to_afppath(server, path);
-    ret = dsi_send(server, (char *) getfiledirparms, len, DSI_DEFAULT_TIMEOUT,
+    ret = dsi_send(server, (char *) getfiledirparms, len,
+                   server->dsi_default_timeout,
                    afpGetFileDirParms, (void *) fpp);
     free(msg);
     return ret;
@@ -417,7 +419,8 @@ int afp_createfile(struct afp_volume * volume, unsigned char flag,
     request_packet->did = htonl(did);
     copy_path(server, path, pathname, strlen(pathname));
     unixpath_to_afppath(server, path);
-    ret = dsi_send(server, (char *) request_packet, len, DSI_DEFAULT_TIMEOUT,
+    ret = dsi_send(server, (char *) request_packet, len,
+                   server->dsi_default_timeout,
                    afpCreateFile, NULL);
     free(msg);
     return ret;
@@ -459,7 +462,8 @@ int afp_write(struct afp_volume * volume, unsigned short forkid,
     request_packet->forkid = htons(forkid);
     request_packet->offset = htonl(offset);
     request_packet->reqcount = htonl(reqcount);
-    ret = dsi_send(server, (char *) request_packet, len, DSI_DEFAULT_TIMEOUT,
+    ret = dsi_send(server, (char *) request_packet, len,
+                   server->dsi_default_timeout,
                    afpWrite, (void *) written);
     free(msg);
     return ret;
@@ -521,7 +525,8 @@ int afp_writeext(struct afp_volume * volume, unsigned short forkid,
     request_packet->forkid = htons(forkid);
     request_packet->offset = hton64(offset);
     request_packet->reqcount = hton64(reqcount);
-    ret = dsi_send(server, (char *) request_packet, len, DSI_DEFAULT_TIMEOUT,
+    ret = dsi_send(server, (char *) request_packet, len,
+                   server->dsi_default_timeout,
                    afpWriteExt, (void *) written);
     free(msg);
     return ret;

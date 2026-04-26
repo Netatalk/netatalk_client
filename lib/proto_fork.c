@@ -44,7 +44,7 @@ int afp_setforkparms(struct afp_volume * volume,
         request64.padding = 0;
         request64.newlen64 = hton64(len);
         return dsi_send(volume->server, (char *) &request64,
-                        sizeof(request64), DSI_DEFAULT_TIMEOUT, afpSetForkParms, NULL);
+                        sizeof(request64), volume->server->dsi_default_timeout, afpSetForkParms, NULL);
     } else {
         /* Legacy 32-bit version */
         struct {
@@ -62,7 +62,7 @@ int afp_setforkparms(struct afp_volume * volume,
         request32.bitmap = htons(bitmap);
         request32.newlen = htonl(len);
         return dsi_send(volume->server, (char *) &request32,
-                        sizeof(request32), DSI_DEFAULT_TIMEOUT, afpSetForkParms, NULL);
+                        sizeof(request32), volume->server->dsi_default_timeout, afpSetForkParms, NULL);
     }
 }
 
@@ -82,7 +82,8 @@ int afp_closefork(struct afp_volume * volume,
     request_packet.pad = 0;
     request_packet.forkid = htons(forkid);
     return dsi_send(volume->server, (char *) &request_packet,
-                    sizeof(request_packet), DSI_DEFAULT_TIMEOUT, afpFlushFork, NULL);
+                    sizeof(request_packet), volume->server->dsi_default_timeout, afpFlushFork,
+                    NULL);
 }
 
 
@@ -102,7 +103,8 @@ int afp_flushfork(struct afp_volume * volume,
     request_packet.pad = 0;
     request_packet.forkid = htons(forkid);
     return dsi_send(volume->server, (char *) &request_packet,
-                    sizeof(request_packet), DSI_DEFAULT_TIMEOUT, afpFlushFork, NULL);
+                    sizeof(request_packet), volume->server->dsi_default_timeout, afpFlushFork,
+                    NULL);
 }
 
 int afp_openfork_reply(__attribute__((unused)) struct afp_server *server,
@@ -173,7 +175,7 @@ int afp_openfork(struct afp_volume * volume,
     afp_openfork_request->accessmode = htons(accessmode);
     copy_path(server, pathptr, filename, strlen(filename));
     unixpath_to_afppath(server, pathptr);
-    ret = dsi_send(server, (char *) msg, len, DSI_DEFAULT_TIMEOUT,
+    ret = dsi_send(server, (char *) msg, len, server->dsi_default_timeout,
                    afpOpenFork, (void *) fp);
     free(msg);
     return ret;
@@ -203,7 +205,7 @@ int afp_byterangelock(struct afp_volume * volume,
     request.offset = htonl(offset);
     request.len = htonl(len);
     rc = dsi_send(volume->server, (char *) &request,
-                  sizeof(request), DSI_DEFAULT_TIMEOUT,
+                  sizeof(request), volume->server->dsi_default_timeout,
                   afpByteRangeLock, (void *) generated_offset);
     return rc;
 }
@@ -249,7 +251,7 @@ int afp_byterangelockext(struct afp_volume * volume,
     request.offset = hton64(offset);
     request.len = hton64(len);
     rc = dsi_send(volume->server, (char *) &request,
-                  sizeof(request), DSI_DEFAULT_TIMEOUT,
+                  sizeof(request), volume->server->dsi_default_timeout,
                   afpByteRangeLockExt, (void *) generated_offset);
     return rc;
 }

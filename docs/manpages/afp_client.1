@@ -1,4 +1,4 @@
-.Dd January 25, 2026
+.Dd April 18, 2026
 .Dt AFP_CLIENT 1
 .Os afpfs-ng
 .Sh NAME
@@ -143,6 +143,11 @@ as the volume password, you will be prompted for it.
 .It Fl u , Fl -user Ar username
 Authenticate with the AFP server as
 .Ar username .
+.It Fl t , Fl -timeout Ar seconds
+Override the default DSI request timeout.
+If not specified, the timeout is selected automatically based on the
+server type: Time Capsule servers default to 30 seconds to accommodate
+spinning disk wake-up latency; all other server types default to 5 seconds.
 .It Fl v , Fl -afpversion Ar afp_version
 Specify the AFP protocol version that will be used for a mount.
 By default afpfs-ng will choose the highest AFP version shared between

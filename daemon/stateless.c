@@ -1192,7 +1192,7 @@ int afp_sl_getvols(struct afp_url * url, unsigned int start,
  */
 
 int afp_sl_connect(struct afp_url * url, unsigned int uam_mask,
-                   serverid_t *id, char *loginmesg, int *error)
+                   serverid_t *id, char *loginmesg, int *error, int dsi_timeout)
 {
     struct afp_server_connect_request req;
     const struct afp_server_connect_response *resp;
@@ -1208,6 +1208,7 @@ int afp_sl_connect(struct afp_url * url, unsigned int uam_mask,
     req.header.command = AFP_SERVER_COMMAND_CONNECT;
     memcpy(&req.url, url, sizeof(struct afp_url));
     req.uam_mask = uam_mask;
+    req.dsi_timeout = dsi_timeout;
 
     if (send_command(sizeof(req), (char *)&req, AFP_SERVER_COMMAND_CONNECT) < 0) {
         return AFP_SERVER_RESULT_DAEMON_ERROR;

@@ -29,6 +29,7 @@ int cmdline_afp_setup(int recursive, int batch_mode, char * url_string);
 void cmdline_afp_setup_client(void);
 void cmdline_set_log_level(int loglevel);
 void cmdline_set_verbose(int verbose);
+void cmdline_set_dsi_timeout(int timeout);
 int cmdline_batch_transfer(char * local_path, int direction, int recursive);
 char *afp_remote_file_generator(const char *text, int state);
 

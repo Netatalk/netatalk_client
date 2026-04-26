@@ -761,7 +761,7 @@ void *dsi_incoming_attention(void * other)
     if (checkmessage) {
         afp_getsrvrmsg(server, AFPMESG_SERVER,
                        ((server->using_version && server->using_version->av_number >= 30) ? 1 : 0),
-                       DSI_DEFAULT_TIMEOUT, mesg);
+                       server->dsi_default_timeout, mesg);
 
         if (bcmp(mesg, "The server is going down for maintenance.", 41) == 0) {
             shutdown = 1;

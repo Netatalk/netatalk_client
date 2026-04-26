@@ -477,11 +477,13 @@ int main(int argc, char *argv[])
     int verbose = 0;
     int show_usage = 0;
     int log_level = LOG_NOTICE;
+    int dsi_timeout = 0;
     struct option long_options[] = {
         {"help", 0, 0, 'h'},
         {"recursive", 0, 0, 'r'},
         {"verbose", 0, 0, 'V'},
         {"loglevel", 1, 0, 'v'},
+        {"timeout", 1, 0, 't'},
         {NULL, 0, NULL, 0},
     };
     char *url = NULL;
@@ -490,7 +492,7 @@ int main(int argc, char *argv[])
     int direction = 0; /* 0 = GET (remote->local), 1 = PUT (local->remote) */
 
     while (1) {
-        c = getopt_long(argc, argv, "hrVv:",
+        c = getopt_long(argc, argv, "hrVv:t:",
                         long_options, &option_index);
 
         if (c == -1) {
@@ -508,6 +510,10 @@ int main(int argc, char *argv[])
 
         case 'V':
             verbose = 1;
+            break;
+
+        case 't':
+            dsi_timeout = strtol(optarg, NULL, 10);
             break;
 
         case 'v': {
@@ -538,6 +544,7 @@ int main(int argc, char *argv[])
     cmdline_afp_setup_client();
     cmdline_set_log_level(log_level);
     cmdline_set_verbose(verbose);
+    cmdline_set_dsi_timeout(dsi_timeout);
 
     /* Check arguments for batch mode */
     if (argc - optind == 2) {

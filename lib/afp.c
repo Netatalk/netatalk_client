@@ -562,6 +562,7 @@ struct afp_server *afp_server_init(struct addrinfo * address)
     s->attention_quantum = AFP_DEFAULT_ATTENTION_QUANTUM;
     s->attention_buffer = malloc(s->attention_quantum);
     s->attention_len = 0;
+    s->dsi_default_timeout = DSI_DEFAULT_TIMEOUT;
     s->connect_state = SERVER_STATE_DISCONNECTED;
     s->address = address;
     /* Initialize mutexes */

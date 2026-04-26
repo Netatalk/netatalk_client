@@ -1862,6 +1862,10 @@ static int process_connect(struct daemon_client * c)
         goto error;
     }
 
+    if (req->dsi_timeout > 0) {
+        s->dsi_default_timeout = req->dsi_timeout;
+    }
+
     /* Immediately copy data from server before it can be freed asynchronously */
     server_copy = s;
 

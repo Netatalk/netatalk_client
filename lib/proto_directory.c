@@ -90,7 +90,7 @@ int afp_moveandrename(struct afp_volume *volume,
     p += sizeof_path_header(server) + dlen;
     copy_path(server, p, new_name, nlen);
     unixpath_to_afppath(server, p);
-    ret = dsi_send(server, msg, len, DSI_DEFAULT_TIMEOUT, afpMoveAndRename,
+    ret = dsi_send(server, msg, len, server->dsi_default_timeout, afpMoveAndRename,
                    NULL);
     free(msg);
     return ret;
@@ -133,7 +133,7 @@ int afp_rename(struct afp_volume *volume,
     pathtoptr = pathfromptr + sizeof_path_header(server) + strlen(path_from);
     copy_path(server, pathtoptr, path_to, strlen(path_to));
     unixpath_to_afppath(server, pathtoptr);
-    ret = dsi_send(server, msg, len, DSI_DEFAULT_TIMEOUT, afpRename, NULL);
+    ret = dsi_send(server, msg, len, server->dsi_default_timeout, afpRename, NULL);
     free(msg);
     return ret;
 }
@@ -170,7 +170,7 @@ int afp_createdir(struct afp_volume * volume, unsigned int dirid,
     request_packet->dirid = htonl(dirid);
     copy_path(server, pathptr, pathname, strlen(pathname));
     unixpath_to_afppath(server, pathptr);
-    ret = dsi_send(server, msg, len, DSI_DEFAULT_TIMEOUT,
+    ret = dsi_send(server, msg, len, server->dsi_default_timeout,
                    afpCreateDir, (void *)did_p);
     free(msg);
     return ret;
@@ -366,7 +366,7 @@ int afp_enumerate(
         65535 : server->bufsize);
     copy_path(server, path, pathname, strlen(pathname));
     unixpath_to_afppath(server, path);
-    rc = dsi_send(server, data, len, DSI_DEFAULT_TIMEOUT,
+    rc = dsi_send(server, data, len, server->dsi_default_timeout,
                   afpEnumerate, (void **) &files);
     *file_p = files;
     free(data);
@@ -425,7 +425,7 @@ int afp_enumerateext(
         65535 : server->bufsize);
     copy_path(server, path, pathname, strlen(pathname));
     unixpath_to_afppath(server, path);
-    rc = dsi_send(server, data, len, DSI_DEFAULT_TIMEOUT,
+    rc = dsi_send(server, data, len, server->dsi_default_timeout,
                   afpEnumerateExt, (void **) &files);
     *file_p = files;
     free(data);
@@ -483,7 +483,7 @@ int afp_enumerateext2(
     afp_enumerateext2_request_packet->maxreplysize = htonl(server->bufsize);
     copy_path(server, path, pathname, strlen(pathname));
     unixpath_to_afppath(server, path);
-    rc = dsi_send(server, data, len, DSI_DEFAULT_TIMEOUT,
+    rc = dsi_send(server, data, len, server->dsi_default_timeout,
                   afpEnumerateExt2, (void **) &files);
     *file_p = files;
     free(data);

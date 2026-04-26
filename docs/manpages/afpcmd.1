@@ -1,4 +1,4 @@
-.Dd January 26, 2026
+.Dd April 18, 2026
 .Dt AFPCMD 1
 .Os afpfs-ng
 .Sh NAME
@@ -50,6 +50,11 @@ Enables verbose mode for file transfers.
 When enabled, displays detailed messages during upload and download operations,
 including per-file transfer statistics.
 By default, only a summary message is shown after each transfer completes.
+.It Fl t , Fl -timeout Ar seconds
+Override the default DSI request timeout.
+If not specified, the timeout is selected automatically based on the
+server type: Time Capsule servers default to 30 seconds to accommodate
+spinning disk wake-up latency; all other server types default to 5 seconds.
 .It Fl v , Fl -loglevel Ar level
 Sets the log verbosity level.
 Accepted values are

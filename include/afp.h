@@ -191,6 +191,9 @@ struct afp_server {
 
     unsigned int tx_delay;
 
+    /* DSI request timeout in seconds; set by server type detection or user override */
+    int dsi_default_timeout;
+
     /* Connection information */
     //the linked list returned by getaddrinfo
     struct addrinfo *address;

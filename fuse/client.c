@@ -353,6 +353,7 @@ static void usage(void)
         "         -m, --map <mapname>        : use this uid/gid mapping method, one of:\n"
         "                                      common, loginids\n"
         "         -O, --options <flags>      : FUSE mount options; see the fuse man page\n"
+        "         -t, --timeout <seconds>    : DSI request timeout (overrides server-type default)\n"
         "\n"
         "    unmount <mountpoint> : unmount the specified mountpoint\n"
         "    status [mountpoint]  : get status of the AFP daemon;\n"
@@ -577,6 +578,7 @@ static int do_mount(int argc, char ** argv)
         {"uam", 1, 0, 'a'},
         {"map", 1, 0, 'm'},
         {"options", 1, 0, 'O'},
+        {"timeout", 1, 0, 't'},
         {0, 0, 0, 0},
     };
 
@@ -593,7 +595,7 @@ static int do_mount(int argc, char ** argv)
 
     while (1) {
         optnum++;
-        c = getopt_long(argc, argv, "a:m:O:o:P:p:u:v:", long_options, &option_index);
+        c = getopt_long(argc, argv, "a:m:O:o:P:p:t:u:v:", long_options, &option_index);
 
         if (c == -1) {
             break;
@@ -633,6 +635,10 @@ static int do_mount(int argc, char ** argv)
 
         case 'p':
             snprintf(request.url.password, AFP_MAX_PASSWORD_LEN, "%s", optarg);
+            break;
+
+        case 't':
+            request.dsi_timeout = strtol(optarg, NULL, 10);
             break;
 
         case 'u':

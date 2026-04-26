@@ -65,6 +65,7 @@ static struct afp_url url;
 static int cmdline_log_min_rank = 2; /* Default rank: notice */
 static int verbose_mode = 0;
 static char connect_servername[AFP_SERVER_NAME_UTF8_LEN];
+static int cmdline_dsi_timeout = 0;
 
 int full_url = 0;
 
@@ -156,7 +157,7 @@ static int reconnect_session(int restore_volume, int restore_dir)
     }
 
     if (afp_sl_connect(&reconnect_url, uam_mask, &new_server_id, mesg,
-                       &error) != 0) {
+                       &error, cmdline_dsi_timeout) != 0) {
         return -1;
     }
 
@@ -2125,6 +2126,11 @@ void cmdline_set_verbose(int verbose)
     verbose_mode = verbose;
 }
 
+void cmdline_set_dsi_timeout(int timeout)
+{
+    cmdline_dsi_timeout = timeout;
+}
+
 static void cmdline_log_for_client(__attribute__((unused)) void * priv,
                                    __attribute__((unused)) enum logtypes logtype,
                                    int loglevel, const char *message)
@@ -2165,7 +2171,8 @@ static int cmdline_server_startup(int batch_mode)
         strlcpy(connect_servername, url.servername, sizeof(connect_servername));
     }
 
-    if (afp_sl_connect(&url, uam_mask, &server_id, mesg, &error)) {
+    if (afp_sl_connect(&url, uam_mask, &server_id, mesg, &error,
+                       cmdline_dsi_timeout)) {
         printf("Could not connect to server\n");
         return -1;
     }

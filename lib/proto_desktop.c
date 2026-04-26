@@ -44,7 +44,7 @@ int afp_geticon(struct afp_volume * volume, unsigned int filecreator,
     request_packet.pad2 = 0;
     request_packet.length = htons(length);
     return dsi_send(volume->server, (char *)&request_packet,
-                    sizeof(request_packet), DSI_DEFAULT_TIMEOUT,
+                    sizeof(request_packet), volume->server->dsi_default_timeout,
                     afpGetIcon, (void *) icon);
 }
 
@@ -108,7 +108,8 @@ int afp_addcomment(struct afp_volume *volume, unsigned int did,
 
     copy_to_pascal(p, comment);
     *size = strlen(comment);
-    rc = dsi_send(volume->server, (char *)msg, len, DSI_DEFAULT_TIMEOUT,
+    rc = dsi_send(volume->server, (char *)msg, len,
+                  volume->server->dsi_default_timeout,
                   afpAddComment, (void *) comment);
     free(msg);
     return rc;
@@ -140,7 +141,8 @@ int afp_getcomment(struct afp_volume *volume, unsigned int did,
     request_packet->dirid = htonl(did);
     copy_path(volume->server, path, pathname, strlen(pathname));
     unixpath_to_afppath(volume->server, path);
-    rc = dsi_send(volume->server, (char *)msg, len, DSI_DEFAULT_TIMEOUT,
+    rc = dsi_send(volume->server, (char *)msg, len,
+                  volume->server->dsi_default_timeout,
                   afpGetComment, (void *) comment);
     free(msg);
     return rc;
@@ -184,7 +186,7 @@ int afp_closedt(struct afp_server * server, unsigned short refnum)
     request_packet.pad = 0;
     request_packet.refnum = htons(refnum);
     return dsi_send(server, (char *) &request_packet,
-                    sizeof(request_packet), DSI_DEFAULT_TIMEOUT, afpCloseDT, NULL);
+                    sizeof(request_packet), server->dsi_default_timeout, afpCloseDT, NULL);
 }
 
 
@@ -204,7 +206,7 @@ int afp_opendt(struct afp_volume *volume, unsigned short * refnum)
     request_packet.pad = 0;
     request_packet.volid = htons(volume->volid);
     return dsi_send(volume->server, (char *) &request_packet,
-                    sizeof(request_packet), DSI_DEFAULT_TIMEOUT, afpOpenDT,
+                    sizeof(request_packet), volume->server->dsi_default_timeout, afpOpenDT,
                     (void *) refnum);
 }
 

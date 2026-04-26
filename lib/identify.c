@@ -8,6 +8,7 @@
 
 #include <string.h>
 #include "afp.h"
+#include "dsi.h"
 
 /*
  * afp_server_identify()
@@ -43,6 +44,10 @@ void afp_server_identify(struct afp_server * s)
                        "Identified server %s as Time Capsule",
                        s->server_name_printable);
         s->server_type = AFPFS_SERVER_TYPE_TIMECAPSULE;
+
+        if (s->dsi_default_timeout == DSI_DEFAULT_TIMEOUT) {
+            s->dsi_default_timeout = DSI_TIMECAPSULE_DEFAULT_TIMEOUT;
+        }
     } else {
         log_for_client(NULL, AFPFSD, LOG_DEBUG,
                        "Could not identify server %s (machine type %s)",
