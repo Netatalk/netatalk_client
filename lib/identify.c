@@ -43,6 +43,12 @@ void afp_server_identify(struct afp_server * s)
                        "Identified server %s as Time Capsule",
                        s->server_name_printable);
         s->server_type = AFPFS_SERVER_TYPE_TIMECAPSULE;
+    } else if (strncmp(s->machine_type, "Windows", 7) == 0) {
+        /* PCMacLan returns "Windows based PC"; Windows SFM returns "Windows NT"*/
+        log_for_client(NULL, AFPFSD, LOG_DEBUG,
+                       "Identified server %s as Windows",
+                       s->server_name_printable);
+        s->server_type = AFPFS_SERVER_TYPE_WINDOWS;
     } else {
         log_for_client(NULL, AFPFSD, LOG_DEBUG,
                        "Could not identify server %s (machine type %s)",
