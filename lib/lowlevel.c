@@ -395,6 +395,13 @@ error:
 }
 
 
+/* FIXME: chunked reads are not implemented. The original intent was to loop,
+ * issuing rx_quantum-sized requests until all bytes were read (see the #if 0
+ * bytesleft block below). Currently a single afp_read/afp_readext call is
+ * issued for the full size, which means when size > rx_quantum the server is
+ * asked for more data than buffer.maxsize can hold. Either restore the loop or
+ * remove the rx_quantum cap on buffer.maxsize and document that chunking is
+ * delegated to the AFP layer. */
 int ll_read(struct afp_volume * volume,
             char *buf, size_t size, off_t offset,
             struct afp_file_info *fp, int *eof)

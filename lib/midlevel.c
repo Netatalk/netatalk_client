@@ -416,7 +416,6 @@ int ml_read(struct afp_volume * volume, const char *path,
             struct afp_file_info *fp, int *eof)
 {
     int ret = 0;
-    //unsigned int bufsize=min(volume->server->rx_quantum,size);
     char converted_path[AFP_MAX_PATH];
     size_t amount_copied = 0;
     *eof = 0;

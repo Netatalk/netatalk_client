@@ -273,8 +273,18 @@ int afp_enumerateext2_reply(struct afp_server *server, char * buf,
     } __attribute__((__packed__)) * reply = (void *) buf;
     const ext2_reply_entry *entry;
     char *p = buf + sizeof(*reply);
+    /* FIXME: max was stubbed out and the bounds check was never implemented.
+     * The loop advances p by entry->size (uint16_t, server-supplied) with no
+     * validation, so a malicious or buggy server can walk p past buf+size.
+     * Per the spec, ActualCount (here: reqcount) bounds the iteration, but
+     * each entry->size must also be validated:
+     *   1. p + sizeof(*entry) <= max  — before casting p to ext2_reply_entry*
+     *   2. ntohs(entry->size) >= sizeof(*entry)  — prevent stall/underflow
+     *   3. p + ntohs(entry->size) <= max  — before advancing p
+     * Restore 'char *max = buf + size' and add these three guards inside the
+     * loop, breaking out (not returning an error) on violation per spec note:
+     * "enumerate until kFPObjectNotFound... filter out duplicates". */
     int i;
-    //char  *max=buf+size;
     struct afp_file_info * filebase = NULL, *filecur = NULL, *new_file = NULL,
                                                               **x = (struct afp_file_info **) other;
 
